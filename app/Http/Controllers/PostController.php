@@ -55,4 +55,28 @@ class PostController extends Controller
                 'message' => 'Post not added'
             ], 500);
     }
+
+    public function update(Request $request, $id)
+    {
+        $post = auth()->user()->posts()->find($id);
+ 
+        if (!$post) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Post not found'
+            ], 400);
+        }
+ 
+        $updated = $post->fill($request->all())->save();
+ 
+        if ($updated)
+            return response()->json([
+                'success' => true
+            ]);
+        else
+            return response()->json([
+                'success' => false,
+                'message' => 'Post can not be updated'
+            ], 500);
+    }
 }
